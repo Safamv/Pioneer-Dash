@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pioneer Dashboard -- Sign in</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="gate">
+    <form class="gate-card" id="login-form" autocomplete="off">
+      <svg class="gate-logo" viewBox="0 0 100 100" aria-hidden="true">
+        <polygon points="50,5 56.2,33.1 78.9,15.5 65.6,41 94.3,42.2 67.7,53.1 89,72.5 61.6,63.8 65.4,92.3 50,68 34.6,92.3 38.4,63.8 11,72.5 32.3,53.1 5.7,42.2 34.4,41 21.1,15.5 43.8,33.1"
+                 fill="currentColor" />
+      </svg>
+      <h1>Pioneer Dashboard</h1>
+      <p class="gate-tagline">Research and compare pioneering destinations</p>
+      <input type="password" id="password" placeholder="Enter password" autofocus required>
+      <button type="submit">Sign in</button>
+      <div class="gate-error" id="gate-error" aria-live="polite"></div>
+      <div class="gate-footer">DEMO BUILD -- placeholder data only</div>
+    </form>
+  </div>
+  <script>
+    (function () {
+      var form = document.getElementById('login-form');
+      var input = document.getElementById('password');
+      var err = document.getElementById('gate-error');
+      var PASSWORD = 'pioneer2025';
+
+      if (sessionStorage.getItem('pioneer_auth') === 'ok') {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (input.value === PASSWORD) {
+          sessionStorage.setItem('pioneer_auth', 'ok');
+          window.location.href = 'dashboard.html';
+        } else {
+          err.textContent = 'Incorrect password. Try again.';
+          input.value = '';
+          input.focus();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
