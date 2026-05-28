@@ -1,6 +1,6 @@
 /* ==========================================================================
    PIONEER DASHBOARD -- MAP MODULE
-   Initializes Leaflet and exposes window.PioneerMap for the app.
+   CartoDB Positron base, teal circle markers, persistent country labels.
    ========================================================================== */
 
 window.PioneerMap = (function () {
@@ -13,55 +13,70 @@ window.PioneerMap = (function () {
     onCountryClick = options.onCountryClick;
 
     map = L.map('map', {
-      worldCopyJump: true,
+      worldCopyJump: false,
       zoomControl: true,
       scrollWheelZoom: true
-    }).setView([15, 30], 2);
+    }).setView([42, 35], 3);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap',
-      maxZoom: 12,
-      minZoom: 2
-    }).addTo(map);
+    L.tileLayer(
+      'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+      {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CartoDB</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
+        minZoom: 2
+      }
+    ).addTo(map);
+
+    var bounds = [];
 
     countries.forEach(function (country) {
-      var marker = L.circleMarker(country.countryLatLng, {
-        radius: 9,
+      var latlng = country.countryLatLng;
+      bounds.push(latlng);
+
+      var marker = L.circleMarker(latlng, {
+        radius: 11,
         fillColor: '#2A9D8F',
-        color: '#1E7268',
-        weight: 2,
+        color: '#FFFFFF',
+        weight: 2.5,
         opacity: 1,
-        fillOpacity: 0.85
+        fillOpacity: 0.92
       }).addTo(map);
 
-      marker.bindTooltip(
-        country.flag + ' ' + country.name + ' &middot; ' + country.community.communitySize,
-        { className: 'pioneer-tip', direction: 'top', offset: [0, -6] }
-      );
+      // Persistent country name label always visible above pin
+      marker.bindTooltip(country.name, {
+        permanent: true,
+        direction: 'top',
+        offset: [0, -14],
+        className: 'pioneer-label'
+      }).openTooltip();
 
       marker.on('click', function () {
         if (onCountryClick) onCountryClick(country.id);
       });
 
       marker.on('mouseover', function () {
-        marker.setStyle({ radius: 11, fillColor: '#E9C46A', color: '#C8A24F' });
+        marker.setStyle({ radius: 13, fillColor: '#E9C46A', color: '#FFFFFF' });
       });
       marker.on('mouseout', function () {
-        marker.setStyle({ radius: 9, fillColor: '#2A9D8F', color: '#1E7268' });
+        marker.setStyle({ radius: 11, fillColor: '#2A9D8F', color: '#FFFFFF' });
       });
 
       markers[country.id] = marker;
     });
+
+    if (bounds.length) {
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 5 });
+    }
   }
 
   function highlight(countryIds) {
     Object.keys(markers).forEach(function (id) {
       var m = markers[id];
       if (!countryIds || countryIds.indexOf(id) !== -1) {
-        m.setStyle({ opacity: 1, fillOpacity: 0.85 });
-        m.getElement && m.getElement() && (m.getElement().style.display = '');
+        m.setStyle({ opacity: 1, fillOpacity: 0.92 });
       } else {
-        m.setStyle({ opacity: 0.15, fillOpacity: 0.1 });
+        m.setStyle({ opacity: 0.18, fillOpacity: 0.1 });
       }
     });
   }

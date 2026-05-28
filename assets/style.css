@@ -222,16 +222,11 @@ main { padding: 20px; max-width: 1500px; margin: 0 auto; }
 .view { display: none; }
 .view.active { display: block; }
 
-/* Home view: cards + map */
+/* Home view: map full-width above cards */
 .home-layout {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
-}
-@media (min-width: 960px) {
-  .home-layout {
-    grid-template-columns: 1.4fr 1fr;
-  }
 }
 
 .cards-panel { min-width: 0; }
@@ -376,16 +371,14 @@ main { padding: 20px; max-width: 1500px; margin: 0 auto; }
    MAP
    -------------------------------------------------------------------------- */
 .map-panel {
-  position: sticky;
-  top: 80px;
-  height: 70vh;
-  min-height: 400px;
+  width: 100%;
+  height: 52vh;
+  min-height: 340px;
 }
-@media (max-width: 959px) {
+@media (max-width: 600px) {
   .map-panel {
-    position: static;
-    height: 50vh;
-    min-height: 320px;
+    height: 42vh;
+    min-height: 260px;
   }
 }
 
@@ -407,6 +400,21 @@ main { padding: 20px; max-width: 1500px; margin: 0 auto; }
   box-shadow: none;
 }
 .leaflet-tooltip.pioneer-tip::before { border-top-color: var(--ink); }
+
+.leaflet-tooltip.pioneer-label {
+  background: rgba(27, 42, 44, 0.82);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  pointer-events: none;
+  letter-spacing: 0.01em;
+}
+.leaflet-tooltip.pioneer-label::before { display: none; }
 
 /* --------------------------------------------------------------------------
    COUNTRY DETAIL VIEW

@@ -53,7 +53,7 @@
       notes:                    { label: 'Notes' }
     },
     community: {
-      __label: 'Community',
+      __label: "Bahá'í Community",
       bahaiFamilyCount:          { label: "Baha'i family count", dir: 'higher' },
       hasLSA:                    { label: 'Has Local Spiritual Assembly', format: 'bool' },
       communitySize:             { label: 'Community size' },
